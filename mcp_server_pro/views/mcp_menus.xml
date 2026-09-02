@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Root app menu -->
+        <menuitem id="menu_mcp_root" name="MCP Server"
+                  web_icon="mcp_server_pro,static/description/icon.png"
+                  sequence="50"/>
+
+        <!-- Dashboard (Control Plane) -->
+        <menuitem id="menu_mcp_dashboard" name="Dashboard"
+                  parent="menu_mcp_root" action="action_mcp_dashboard"
+                  sequence="1"/>
+
+        <!-- Dashboard / overview -->
+        <menuitem id="menu_mcp_tenants" name="Tenants"
+                  parent="menu_mcp_root" action="action_mcp_tenant"
+                  sequence="10"/>
+
+        <!-- Auth & Tokens -->
+        <menuitem id="menu_mcp_auth" name="Auth &amp; Tokens"
+                  parent="menu_mcp_root" sequence="20"/>
+        <menuitem id="menu_mcp_api_keys" name="API Keys"
+                  parent="menu_mcp_auth" action="action_mcp_api_key"
+                  sequence="10"/>
+        <menuitem id="menu_mcp_oauth_clients" name="OAuth Clients"
+                  parent="menu_mcp_auth" action="action_mcp_oauth_client"
+                  sequence="20"/>
+
+        <!-- Data Control -->
+        <menuitem id="menu_mcp_data" name="Data Control"
+                  parent="menu_mcp_root" sequence="30"/>
+        <menuitem id="menu_mcp_model_access" name="Key Model Access"
+                  parent="menu_mcp_data" action="action_mcp_model_access"
+                  sequence="10"/>
+
+        <!-- Automation -->
+        <menuitem id="menu_mcp_automation" name="Automation"
+                  parent="menu_mcp_root" sequence="40"/>
+        <menuitem id="menu_mcp_jobs" name="Bulk Jobs"
+                  parent="menu_mcp_automation" action="action_mcp_job"
+                  sequence="10"/>
+
+        <!-- AI Builder -->
+        <menuitem id="menu_mcp_builder" name="AI Builder"
+                  parent="menu_mcp_root" sequence="50"/>
+        <menuitem id="menu_mcp_generated_modules" name="Generated Modules"
+                  parent="menu_mcp_builder" action="action_mcp_generated_module"
+                  sequence="10"/>
+
+        <!-- Publishing -->
+        <menuitem id="menu_mcp_publishing" name="Publishing"
+                  parent="menu_mcp_root" sequence="60"/>
+        <menuitem id="menu_mcp_portal_pages" name="Portal Pages"
+                  parent="menu_mcp_publishing" action="action_mcp_portal_page"
+                  sequence="10"/>
+
+        <!-- Compliance -->
+        <menuitem id="menu_mcp_compliance" name="Compliance"
+                  parent="menu_mcp_root" sequence="70"/>
+        <menuitem id="menu_mcp_audit_logs" name="Audit Logs"
+                  parent="menu_mcp_compliance" action="action_mcp_audit_log"
+                  sequence="10"/>
+
+        <!-- Configuration -->
+        <menuitem id="menu_mcp_config" name="Configuration"
+                  parent="menu_mcp_root" sequence="90"
+                  groups="mcp_server_pro.group_mcp_admin"/>
+        <menuitem id="menu_mcp_settings" name="Settings"
+                  parent="menu_mcp_config" action="action_mcp_config_settings"
+                  sequence="10"/>
+
+    </data>
+</odoo>

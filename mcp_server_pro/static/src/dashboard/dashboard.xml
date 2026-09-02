@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="mcp_server_pro.Dashboard">
+        <div class="mcp-cockpit">
+
+            <!-- Top bar -->
+            <div class="mcp-topbar">
+                <div class="mcp-brand">
+                    <span class="mcp-logo">◇</span>
+                    <div>
+                        <div class="mcp-title">MCP Control Plane</div>
+                        <div class="mcp-sub">Live AI gateway telemetry</div>
+                    </div>
+                </div>
+                <div class="mcp-controls">
+                    <div class="mcp-window">
+                        <button t-foreach="[[1,'1h'],[24,'24h'],[168,'7d'],[720,'30d']]"
+                                t-as="opt" t-key="opt[0]"
+                                class="mcp-winbtn"
+                                t-att-class="{ 'mcp-winbtn--on': state.window === opt[0] }"
+                                t-on-click="() => this.setWindow(opt[0])">
+                            <t t-esc="opt[1]"/>
+                        </button>
+                    </div>
+                    <button class="mcp-auto" t-on-click="toggleAuto"
+                            t-att-class="{ 'mcp-auto--on': state.autoRefresh }">
+                        <span class="mcp-dot"/> LIVE
+                    </button>
+                    <button class="mcp-refresh" t-on-click="() => this.load()">↻</button>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div t-if="state.error" class="mcp-error">
+                <t t-esc="state.error"/>
+            </div>
+
+            <!-- Loading -->
+            <div t-if="state.loading and !state.data" class="mcp-loading">
+                <div class="mcp-spinner"/>
+                <div>Initializing telemetry…</div>
+            </div>
+
+            <t t-if="state.data">
+
+                <!-- Headline counters -->
+                <div class="mcp-counters">
+                    <div class="mcp-stat mcp-stat--hero">
+                        <div class="mcp-stat-label">REQUESTS</div>
+                        <div class="mcp-stat-value" t-esc="counters.total_requests"/>
+                        <div class="mcp-stat-foot">last <t t-esc="state.window"/>h</div>
+                    </div>
+                    <div class="mcp-stat">
+                        <div class="mcp-stat-label">SUCCESS</div>
+                        <div class="mcp-stat-value mcp-text-ok">
+                            <t t-esc="counters.success_rate"/><span class="mcp-unit">%</span>
+                        </div>
+                        <div class="mcp-stat-foot"><t t-esc="counters.ok"/> ok</div>
+                    </div>
+                    <div class="mcp-stat">
+                        <div class="mcp-stat-label">AVG LATENCY</div>
+                        <div class="mcp-stat-value">
+                            <t t-esc="counters.avg_ms"/><span class="mcp-unit">ms</span>
+                        </div>
+                        <div class="mcp-stat-foot">server time</div>
+                    </div>
+                    <div class="mcp-stat">
+                        <div class="mcp-stat-label">DENIED</div>
+                        <div class="mcp-stat-value mcp-text-warn" t-esc="counters.denied"/>
+                        <div class="mcp-stat-foot">scope blocks</div>
+                    </div>
+                    <div class="mcp-stat">
+                        <div class="mcp-stat-label">ERRORS</div>
+                        <div class="mcp-stat-value mcp-text-err" t-esc="counters.error"/>
+                        <div class="mcp-stat-foot"><t t-esc="counters.rate_limited"/> throttled</div>
+                    </div>
+                    <div class="mcp-stat">
+                        <div class="mcp-stat-label">ROWS TOUCHED</div>
+                        <div class="mcp-stat-value" t-esc="counters.records_touched"/>
+                        <div class="mcp-stat-foot"><t t-esc="counters.active_keys"/> active keys</div>
+                    </div>
+                </div>
+
+                <!-- Main grid -->
+                <div class="mcp-grid">
+
+                    <!-- Volume chart -->
+                    <div class="mcp-panel mcp-panel--wide">
+                        <div class="mcp-panel-head">
+                            <span>Request Volume</span>
+                            <span class="mcp-panel-meta"><t t-esc="state.data.volume.interval"/> buckets</span>
+                        </div>
+                        <div class="mcp-canvas-wrap">
+                            <canvas t-ref="volumeCanvas"/>
+                        </div>
+                    </div>
+
+                    <!-- Status mix -->
+                    <div class="mcp-panel">
+                        <div class="mcp-panel-head"><span>Status Mix</span></div>
+                        <div class="mcp-statusbar">
+                            <div t-foreach="statusMix" t-as="s" t-key="s.status"
+                                 class="mcp-statusseg"
+                                 t-attf-style="width: {{s.pct}}%; background: {{s.color}};"
+                                 t-att-title="s.status + ': ' + s.count"/>
+                        </div>
+                        <div class="mcp-legend">
+                            <div t-foreach="statusMix" t-as="s" t-key="s.status" class="mcp-legrow">
+                                <span class="mcp-legdot" t-attf-style="background: {{s.color}};"/>
+                                <span class="mcp-legname" t-esc="s.status"/>
+                                <span class="mcp-legval"><t t-esc="s.count"/> · <t t-esc="s.pct"/>%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top tools -->
+                    <div class="mcp-panel">
+                        <div class="mcp-panel-head"><span>Top Tools</span></div>
+                        <div class="mcp-bars">
+                            <div t-foreach="topTools" t-as="t" t-key="t.tool" class="mcp-barrow">
+                                <span class="mcp-barlabel" t-esc="t.tool"/>
+                                <div class="mcp-bartrack">
+                                    <div class="mcp-barfill" t-attf-style="width: {{t.pct}}%;"/>
+                                </div>
+                                <span class="mcp-barval" t-esc="t.count"/>
+                            </div>
+                            <div t-if="!topTools.length" class="mcp-empty">No tool calls yet</div>
+                        </div>
+                    </div>
+
+                    <!-- Slowest tools -->
+                    <div class="mcp-panel">
+                        <div class="mcp-panel-head"><span>Slowest Tools</span><span class="mcp-panel-meta">avg ms</span></div>
+                        <div class="mcp-list">
+                            <div t-foreach="slowestTools" t-as="t" t-key="t.tool" class="mcp-listrow">
+                                <span class="mcp-mono" t-esc="t.tool"/>
+                                <span class="mcp-listval">
+                                    <t t-esc="t.avg_ms"/>ms
+                                    <span class="mcp-listsub">· <t t-esc="t.count"/>×</span>
+                                </span>
+                            </div>
+                            <div t-if="!slowestTools.length" class="mcp-empty">—</div>
+                        </div>
+                    </div>
+
+                    <!-- Busy keys -->
+                    <div class="mcp-panel">
+                        <div class="mcp-panel-head">
+                            <span>Busiest Keys</span>
+                            <button class="mcp-link" t-on-click="openKeys">manage →</button>
+                        </div>
+                        <div class="mcp-bars">
+                            <div t-foreach="busyKeys" t-as="k" t-key="k.key" class="mcp-barrow">
+                                <span class="mcp-barlabel" t-esc="k.key"/>
+                                <div class="mcp-bartrack">
+                                    <div class="mcp-barfill mcp-barfill--alt" t-attf-style="width: {{k.pct}}%;"/>
+                                </div>
+                                <span class="mcp-barval" t-esc="k.count"/>
+                            </div>
+                            <div t-if="!busyKeys.length" class="mcp-empty">No activity</div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant health -->
+                    <div class="mcp-panel">
+                        <div class="mcp-panel-head"><span>Tenant Health</span></div>
+                        <div class="mcp-list">
+                            <div t-foreach="tenants" t-as="t" t-key="t.id" class="mcp-listrow">
+                                <span>
+                                    <span class="mcp-health"
+                                          t-att-class="t.suspended ? 'mcp-health--down' : 'mcp-health--up'"/>
+                                    <t t-esc="t.name"/>
+                                </span>
+                                <span class="mcp-listsub">
+                                    <t t-esc="t.keys"/> keys · <t t-esc="t.rate_sec"/>/s
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live tail -->
+                    <div class="mcp-panel mcp-panel--wide">
+                        <div class="mcp-panel-head">
+                            <span>Live Activity</span>
+                            <button class="mcp-link" t-on-click="openAudit">full log →</button>
+                        </div>
+                        <div class="mcp-tail">
+                            <div t-foreach="recent" t-as="r" t-key="r.id" class="mcp-tailrow">
+                                <span class="mcp-tailtime" t-esc="r.time"/>
+                                <span t-att-class="statusClass(r.status)" t-esc="r.status"/>
+                                <span class="mcp-mono mcp-tailtool" t-esc="r.tool_name"/>
+                                <span class="mcp-tailmodel" t-esc="r.model_name or '—'"/>
+                                <span class="mcp-tailkey" t-esc="r.key_name or ''"/>
+                                <span class="mcp-tailms"><t t-esc="r.duration_ms"/>ms</span>
+                            </div>
+                            <div t-if="!recent.length" class="mcp-empty">Waiting for calls…</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mcp-footer">
+                    <span>Updated <t t-esc="state.lastRefresh"/></span>
+                    <span>Odoo MCP Server (PRO) · control plane</span>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

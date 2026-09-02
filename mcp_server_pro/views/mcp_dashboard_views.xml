@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_mcp_dashboard" model="ir.actions.client">
+            <field name="name">Control Plane</field>
+            <field name="tag">mcp_server_pro.dashboard</field>
+        </record>
+
+    </data>
+</odoo>

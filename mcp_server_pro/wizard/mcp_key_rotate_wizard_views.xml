@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_mcp_key_rotate_wizard_form" model="ir.ui.view">
+            <field name="name">mcp.key.rotate.wizard.form</field>
+            <field name="model">mcp.key.rotate.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Rotate Token">
+                    <group invisible="done">
+                        <field name="key_id" readonly="1"/>
+                        <field name="grace_days"/>
+                        <div class="text-muted" colspan="2">
+                            The current token(s) keep working during the grace
+                            period, then expire automatically. Distribute the
+                            new token before grace ends to avoid downtime.
+                        </div>
+                    </group>
+                    <group invisible="not done">
+                        <div class="alert alert-success" role="alert" colspan="2">
+                            <strong>Copy this token now — it won't be shown again.</strong>
+                        </div>
+                        <field name="new_token" readonly="1" widget="CopyClipboardChar"/>
+                    </group>
+                    <footer>
+                        <button name="action_rotate" type="object"
+                                string="Rotate Now" class="btn-primary"
+                                invisible="done"/>
+                        <button string="Close" class="btn-secondary"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

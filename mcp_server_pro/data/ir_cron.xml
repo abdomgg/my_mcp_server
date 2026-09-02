@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="cron_mcp_expire_tokens" model="ir.cron">
+            <field name="name">MCP: Expire grace tokens</field>
+            <field name="model_id" ref="model_mcp_token"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_expire_tokens()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="cron_mcp_audit_retention" model="ir.cron">
+            <field name="name">MCP: Apply audit log retention</field>
+            <field name="model_id" ref="model_mcp_audit_log"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_apply_retention()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="cron_mcp_run_jobs" model="ir.cron">
+            <field name="name">MCP: Run background jobs</field>
+            <field name="model_id" ref="model_mcp_job"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_run_jobs()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

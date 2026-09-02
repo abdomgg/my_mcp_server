@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Default config parameters -->
+        <record id="param_audit_retention" model="ir.config_parameter">
+            <field name="key">mcp_server_pro.audit_retention_days</field>
+            <field name="value">90</field>
+        </record>
+        <record id="param_default_max_rows" model="ir.config_parameter">
+            <field name="key">mcp_server_pro.default_max_rows</field>
+            <field name="value">500</field>
+        </record>
+        <record id="param_export_row_cap" model="ir.config_parameter">
+            <field name="key">mcp_server_pro.export_row_cap</field>
+            <field name="value">50000</field>
+        </record>
+
+        <!-- A default tenant so the module is usable immediately -->
+        <record id="tenant_default" model="mcp.tenant">
+            <field name="name">Default Workspace</field>
+            <field name="slug">default</field>
+            <field name="rate_limit_per_sec">20</field>
+            <field name="rate_limit_per_min">600</field>
+        </record>
+
+    </data>
+</odoo>

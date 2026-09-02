@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Category -->
+        <record id="module_category_mcp" model="ir.module.category">
+            <field name="name">MCP Server</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- Groups -->
+        <record id="group_mcp_user" model="res.groups">
+            <field name="name">MCP User</field>
+            <field name="category_id" ref="module_category_mcp"/>
+            <field name="comment">Can view MCP keys, logs and tenants (read-mostly).</field>
+        </record>
+
+        <record id="group_mcp_admin" model="res.groups">
+            <field name="name">MCP Administrator</field>
+            <field name="category_id" ref="module_category_mcp"/>
+            <field name="implied_ids" eval="[(4, ref('group_mcp_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="comment">Full control: tenants, keys, scopes, module builder, installs.</field>
+        </record>
+
+        <!-- Tenant isolation record rules -->
+        <record id="rule_mcp_key_tenant" model="ir.rule">
+            <field name="name">MCP Key: own tenants only (non-admin)</field>
+            <field name="model_id" ref="model_mcp_api_key"/>
+            <field name="groups" eval="[(4, ref('group_mcp_user'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

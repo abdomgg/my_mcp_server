@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_mcp_portal_page_list" model="ir.ui.view">
+            <field name="name">mcp.portal.page.list</field>
+            <field name="model">mcp.portal.page</field>
+            <field name="arch" type="xml">
+                <list decoration-muted="not is_published">
+                    <field name="name"/>
+                    <field name="tenant_id"/>
+                    <field name="slug"/>
+                    <field name="theme"/>
+                    <field name="is_public"/>
+                    <field name="view_count"/>
+                    <field name="is_published" widget="boolean_toggle"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_mcp_portal_page_form" model="ir.ui.view">
+            <field name="name">mcp.portal.page.form</field>
+            <field name="model">mcp.portal.page</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_open_page" type="object"
+                                string="Open Page" class="btn-primary"
+                                icon="fa-external-link"
+                                invisible="not is_published"/>
+                        <field name="is_published" widget="boolean_toggle"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" placeholder="Page title"/></h1>
+                            <field name="slug" placeholder="url-slug"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="tenant_id"/>
+                                <field name="key_id"/>
+                                <field name="theme"/>
+                            </group>
+                            <group>
+                                <field name="is_public"/>
+                                <field name="allow_export"/>
+                                <field name="view_count" readonly="1"/>
+                            </group>
+                        </group>
+                        <separator string="Layout Spec (JSON)"/>
+                        <field name="layout_json" widget="ace"
+                               placeholder='{"widgets": [{"type":"kpi","title":"Open Leads","model":"crm.lead","domain":"[]","measure":"__count"}]}'/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_mcp_portal_page" model="ir.actions.act_window">
+            <field name="name">Portal Pages</field>
+            <field name="res_model">mcp.portal.page</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

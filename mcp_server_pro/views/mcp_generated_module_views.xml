@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_mcp_generated_module_list" model="ir.ui.view">
+            <field name="name">mcp.generated.module.list</field>
+            <field name="model">mcp.generated.module</field>
+            <field name="arch" type="xml">
+                <list decoration-success="state=='installed'"
+                      decoration-danger="state=='failed'">
+                    <field name="name"/>
+                    <field name="display_name_"/>
+                    <field name="tenant_id"/>
+                    <field name="model_count"/>
+                    <field name="odoo_version"/>
+                    <field name="state"/>
+                    <field name="create_date"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_mcp_generated_module_form" model="ir.ui.view">
+            <field name="name">mcp.generated.module.form</field>
+            <field name="model">mcp.generated.module</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_build_zip" type="object"
+                                string="Build ZIP" class="btn-primary"
+                                invisible="state not in ('spec','validated','failed')"/>
+                        <button name="action_download" type="object"
+                                string="Download ZIP" class="btn-secondary"
+                                invisible="state not in ('built','installed')"/>
+                        <button name="action_install" type="object"
+                                string="Install" class="btn-primary"
+                                invisible="state != 'built'"
+                                confirm="Install this generated module into Odoo now?"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="spec,validated,built,installed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="display_name_" placeholder="Module Title"/></h1>
+                            <field name="name" placeholder="technical_name"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="tenant_id"/>
+                                <field name="key_id"/>
+                                <field name="odoo_version"/>
+                            </group>
+                            <group>
+                                <field name="model_count"/>
+                                <field name="zip_filename"/>
+                                <field name="zip_file" filename="zip_filename"/>
+                            </group>
+                        </group>
+                        <field name="summary"/>
+                        <notebook>
+                            <page string="Spec (JSON)">
+                                <field name="spec_json" widget="ace"/>
+                            </page>
+                            <page string="Validation Report">
+                                <field name="validation_report" widget="ace"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_mcp_generated_module" model="ir.actions.act_window">
+            <field name="name">Generated Modules</field>
+            <field name="res_model">mcp.generated.module</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">No generated modules yet</p>
+                <p>When an AI agent uses the module builder tools, the modules
+                   it produces are tracked here for review before install.</p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

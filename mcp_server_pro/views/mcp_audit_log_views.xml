@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_mcp_audit_log_list" model="ir.ui.view">
+            <field name="name">mcp.audit.log.list</field>
+            <field name="model">mcp.audit.log</field>
+            <field name="arch" type="xml">
+                <list decoration-danger="status=='error'"
+                      decoration-warning="status=='denied' or status=='rate_limited'"
+                      decoration-success="status=='ok'" create="false">
+                    <field name="create_date"/>
+                    <field name="tenant_id"/>
+                    <field name="key_name"/>
+                    <field name="user_id"/>
+                    <field name="tool_name"/>
+                    <field name="model_name"/>
+                    <field name="status"/>
+                    <field name="record_count"/>
+                    <field name="duration_ms"/>
+                    <field name="remote_ip"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_mcp_audit_log_form" model="ir.ui.view">
+            <field name="name">mcp.audit.log.form</field>
+            <field name="model">mcp.audit.log</field>
+            <field name="arch" type="xml">
+                <form create="false" edit="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="tenant_id"/>
+                                <field name="key_name"/>
+                                <field name="user_id"/>
+                                <field name="remote_ip"/>
+                            </group>
+                            <group>
+                                <field name="tool_name"/>
+                                <field name="method"/>
+                                <field name="model_name"/>
+                                <field name="status"/>
+                                <field name="duration_ms"/>
+                                <field name="record_count"/>
+                            </group>
+                        </group>
+                        <field name="error_message" invisible="not error_message"/>
+                        <notebook>
+                            <page string="Request">
+                                <field name="request_payload" widget="ace"/>
+                            </page>
+                            <page string="Response">
+                                <field name="response_payload" widget="ace"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_mcp_audit_log_search" model="ir.ui.view">
+            <field name="name">mcp.audit.log.search</field>
+            <field name="model">mcp.audit.log</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="tool_name"/>
+                    <field name="model_name"/>
+                    <field name="key_name"/>
+                    <field name="remote_ip"/>
+                    <filter name="ok" string="Success"
+                            domain="[('status','=','ok')]"/>
+                    <filter name="denied" string="Denied"
+                            domain="[('status','=','denied')]"/>
+                    <filter name="error" string="Errors"
+                            domain="[('status','=','error')]"/>
+                    <filter name="rl" string="Rate Limited"
+                            domain="[('status','=','rate_limited')]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="g_tenant" string="Tenant"
+                                context="{'group_by':'tenant_id'}"/>
+                        <filter name="g_tool" string="Tool"
+                                context="{'group_by':'tool_name'}"/>
+                        <filter name="g_status" string="Status"
+                                context="{'group_by':'status'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_mcp_audit_log" model="ir.actions.act_window">
+            <field name="name">Audit Logs</field>
+            <field name="res_model">mcp.audit.log</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_mcp_audit_log_search"/>
+        </record>
+
+    </data>
+</odoo>

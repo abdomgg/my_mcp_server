@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_mcp_test_connection_wizard_form" model="ir.ui.view">
+            <field name="name">mcp.test.connection.wizard.form</field>
+            <field name="model">mcp.test.connection.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Connect a Client">
+                    <group invisible="new_token">
+                        <field name="key_id" readonly="1"/>
+                        <field name="endpoint_url" readonly="1"
+                               widget="CopyClipboardChar"/>
+                    </group>
+                    <group invisible="not new_token">
+                        <div class="alert alert-success" role="alert" colspan="2">
+                            <strong>Token issued — copy it now.</strong>
+                        </div>
+                        <field name="new_token" readonly="1"
+                               widget="CopyClipboardChar"/>
+                        <separator string="Claude Desktop config" colspan="2"/>
+                        <field name="sample_config" readonly="1"
+                               widget="CopyClipboardText"/>
+                    </group>
+                    <footer>
+                        <button name="action_issue_token" type="object"
+                                string="Issue Token &amp; Show Config"
+                                class="btn-primary" invisible="new_token"/>
+                        <button string="Close" class="btn-secondary"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

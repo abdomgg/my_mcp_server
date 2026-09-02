@@ -1,0 +1,9 @@
+// Odoo MCP Server (PRO) — backend styling
+.o_mcp_kpi_value {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.o_mcp_status_ok { color: #28a745; }
+.o_mcp_status_denied { color: #ffc107; }
+.o_mcp_status_error { color: #dc3545; }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_mcp_config_settings_form" model="ir.ui.view">
+            <field name="name">mcp.config.settings.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="MCP Server" string="MCP Server"
+                         name="mcp_server_pro">
+                        <block title="Performance" name="mcp_perf">
+                            <setting string="Redis URL"
+                                     help="Optional. Enables distributed rate limiting and OAuth code storage. Falls back to in-memory.">
+                                <field name="mcp_redis_url"
+                                       placeholder="redis://localhost:6379/0"/>
+                            </setting>
+                            <setting string="Default Max Rows"
+                                     help="Cap on rows returned per read/search.">
+                                <field name="mcp_default_max_rows"/>
+                            </setting>
+                            <setting string="Export Row Cap">
+                                <field name="mcp_export_row_cap"/>
+                            </setting>
+                        </block>
+                        <block title="Governance" name="mcp_gov">
+                            <setting string="Audit Retention (days)"
+                                     help="Logs older than this are purged daily. 0 = keep forever.">
+                                <field name="mcp_audit_retention_days"/>
+                            </setting>
+                            <setting string="Capture Payloads by Default"
+                                     help="Store request/response bodies in audit logs.">
+                                <field name="mcp_capture_payloads_default"/>
+                            </setting>
+                            <setting string="Enable Module Builder"
+                                     help="Global switch for AI module generation/installation.">
+                                <field name="mcp_enable_module_builder"/>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_mcp_config_settings" model="ir.actions.act_window">
+            <field name="name">MCP Settings</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module': 'mcp_server_pro'}</field>
+        </record>
+
+    </data>
+</odoo>
