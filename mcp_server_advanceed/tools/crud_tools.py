@@ -53,7 +53,7 @@ class McpToolCrud(models.AbstractModel):
     def _row_cap(self, access, requested):
         cap = (access.max_rows if access else 0) or int(
             self.env["ir.config_parameter"].sudo().get_param(
-                "mcp_server_pro.default_max_rows", "500"))
+                "mcp_server_advanceed.default_max_rows", "500"))
         if requested:
             return min(requested, cap)
         return cap

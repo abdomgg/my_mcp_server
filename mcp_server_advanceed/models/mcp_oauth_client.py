@@ -28,7 +28,7 @@ class McpOAuthClient(models.Model):
         readonly=True)
     client_secret = fields.Char(
         copy=False, default=lambda s: secrets.token_urlsafe(32), readonly=True,
-        groups="mcp_server_pro.group_mcp_admin")
+        groups="mcp_server_advanceed.group_mcp_admin")
     redirect_uris = fields.Text(
         help="Newline-separated allowed redirect URIs (e.g. "
              "https://claude.ai/api/mcp/auth_callback). Dynamically "

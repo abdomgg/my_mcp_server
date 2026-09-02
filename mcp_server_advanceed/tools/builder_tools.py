@@ -342,16 +342,16 @@ class McpToolBuilder(models.AbstractModel):
         download the ZIP and install out-of-band.
         """
         if not (self.env.su or self.env.user.has_group(
-                "mcp_server_pro.group_mcp_admin")):
+                "mcp_server_advanceed.group_mcp_admin")):
             raise UserError(_("Only MCP admins may install modules."))
 
         addons_path = self.env["ir.config_parameter"].sudo().get_param(
-            "mcp_server_pro.addons_path")
+            "mcp_server_advanceed.addons_path")
         if not addons_path or not os.path.isdir(addons_path) \
                 or not os.access(addons_path, os.W_OK):
             raise UserError(_(
                 "No writable addons path configured. Set "
-                "'mcp_server_pro.addons_path' to a directory on Odoo's "
+                "'mcp_server_advanceed.addons_path' to a directory on Odoo's "
                 "addons_path, or download the ZIP and install manually."))
 
         if not _IDENT_RE.match(module_name):

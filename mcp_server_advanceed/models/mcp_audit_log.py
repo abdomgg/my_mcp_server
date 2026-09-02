@@ -55,7 +55,7 @@ class McpAuditLog(models.Model):
     def _cron_apply_retention(self):
         """Delete logs older than the configured retention window."""
         days = int(self.env["ir.config_parameter"].sudo().get_param(
-            "mcp_server_pro.audit_retention_days", "90"))
+            "mcp_server_advanceed.audit_retention_days", "90"))
         if days <= 0:
             return
         cutoff = fields.Datetime.now() - timedelta(days=days)

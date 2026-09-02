@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 {
-    "name": "Odoo MCP Server (PRO)",
+    "name": "Odoo MCP Server (Advanced)",
     "version": "18.0.3.1.0",
     "category": "Productivity/AI",
     "summary": "More Than Just MCP Server — Build Modules · Connect Claude, ChatGPT & AI Agents to live Odoo data, with multi-tenant isolation, scoped keys, BI tools and an AI module builder.",
     "description": """
-Odoo MCP Server (PRO)
+Odoo MCP Server (advanced)
 =====================
 
 Turn Odoo into a governed, multi-tenant AI tool server.
@@ -63,11 +63,11 @@ tools through Odoo's own security layer. It does NOT bypass Odoo security.
     ],
     "assets": {
         "web.assets_backend": [
-            "mcp_server_pro/static/src/scss/mcp_dashboard.scss",
-            "mcp_server_pro/static/src/js/mcp_dashboard.js",
-            "mcp_server_pro/static/src/dashboard/dashboard.scss",
-            "mcp_server_pro/static/src/dashboard/dashboard.js",
-            "mcp_server_pro/static/src/dashboard/dashboard.xml",
+            "mcp_server_advanceed/static/src/scss/mcp_dashboard.scss",
+            "mcp_server_advanceed/static/src/js/mcp_dashboard.js",
+            "mcp_server_advanceed/static/src/dashboard/dashboard.scss",
+            "mcp_server_advanceed/static/src/dashboard/dashboard.js",
+            "mcp_server_advanceed/static/src/dashboard/dashboard.xml",
         ],
     },
     "images": ["static/description/banner.png"],

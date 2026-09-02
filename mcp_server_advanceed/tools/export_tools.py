@@ -41,7 +41,7 @@ class McpToolExport(models.AbstractModel):
             fields_req = ["id", "display_name"]
 
         cap = int(self.env["ir.config_parameter"].sudo().get_param(
-            "mcp_server_pro.export_row_cap", "50000"))
+            "mcp_server_advanceed.export_row_cap", "50000"))
         rows = Model.search_read(domain, fields_req, limit=cap)
 
         fmt = args.get("format", "csv")

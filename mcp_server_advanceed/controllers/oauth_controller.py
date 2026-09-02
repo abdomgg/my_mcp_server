@@ -109,7 +109,7 @@ class McpOAuthController(http.Controller):
         Client = request.env["mcp.oauth.client"].sudo()
         # Bind dynamically-registered clients to the default tenant + its
         # template key (admin can later point them at a tighter template).
-        tenant = request.env.ref("mcp_server_pro.tenant_default",
+        tenant = request.env.ref("mcp_server_advanceed.tenant_default",
                                  raise_if_not_found=False)
         template = Client._default_template_key(tenant)
 

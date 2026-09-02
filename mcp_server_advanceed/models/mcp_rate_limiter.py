@@ -19,9 +19,9 @@ _MEM_WINDOWS = {}
 
 
 def _get_redis(env):
-    """Return a redis client or None. Config param mcp_server_pro.redis_url."""
+    """Return a redis client or None. Config param mcp_server_advanceed.redis_url."""
     url = env["ir.config_parameter"].sudo().get_param(
-        "mcp_server_pro.redis_url")
+        "mcp_server_advanceed.redis_url")
     if not url:
         return None
     try:
